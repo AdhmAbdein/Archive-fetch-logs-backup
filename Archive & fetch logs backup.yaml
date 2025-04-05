@@ -1,0 +1,18 @@
+
+---
+  - name: archive fetch logs backup from managed node and store it in control node
+    hosts: all
+    tasks:
+      - name: create logs bkp directory in managed node
+        file:
+          path: "/backup"
+          state: directory
+  
+      - name: archive logs filr
+        command: tar -czf /backup/{{ inventory_hostname }}.tar.gz /var/log
+  
+      - name: fetch tar file to control node
+        fetch:
+          src: "/backup/{{ inventory_hostname }}.tar.gz"
+          dest: "/tmp"
+  
